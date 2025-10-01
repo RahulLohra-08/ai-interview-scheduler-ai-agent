@@ -4,7 +4,7 @@ import supabase from '@/services/supabaseClient'
 import React, { useContext, useEffect } from 'react'
 
 const Provider = ({children} : any) => {
-    const [user, setUser] = React.useState({});
+    const [user, setUser] = React.useState();
     const createNewUser = async () => {
         try {
             // Get current logged-in user
