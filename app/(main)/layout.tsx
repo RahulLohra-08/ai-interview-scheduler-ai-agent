@@ -5,7 +5,7 @@ const DashboardLayout = ({children}:any) => {
   return (
     <div>
         <DashboardProvider> 
-          <div className='p-8'>
+          <div className=''>
             {children}
           </div>
         </DashboardProvider>
