@@ -16,3 +16,18 @@
 ;; Generating intverview questions using OpenAI API
 using Open Router ai agent to generate interview questions based on the job description and candidate profile. 
 The agent will analyze the provided information and create relevant questions to assess the candidate's suitability for the role.
+
+STEPS
+
+1. Set up the OpenRouter API key in your environment variables.
+2. Go to on website in Model section and select the model you want to use for generating interview questions.
+3. select the OpenAI: gpt-oss-120b (free) model for better results.
+
+Using third-party SDKs
+For information about using third-party SDKs and frameworks with OpenRouter, please see our frameworks documentation:https://openrouter.ai/docs/guides/community/frameworks-and-integrations-overview.
+
+https://openrouter.ai/docs/guides/community/openai-sdk
+
+install: npm i openai
+
+api -> ai-model -> route.jsx

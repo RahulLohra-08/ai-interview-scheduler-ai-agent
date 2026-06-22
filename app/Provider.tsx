@@ -2,6 +2,7 @@
 import { UserDetailsContext } from '@/context/UserDetailsContext';
 import supabase from '@/services/supabaseClient'
 import React, { useContext, useEffect } from 'react'
+import { Toaster } from 'sonner';
 
 const Provider = ({children} : any) => {
     const [user, setUser] = React.useState();
@@ -64,6 +65,7 @@ const Provider = ({children} : any) => {
     <UserDetailsContext.Provider value={{user, setUser}}>
         <div>
             {children}
+            <Toaster />
         </div>
     </UserDetailsContext.Provider>
   )

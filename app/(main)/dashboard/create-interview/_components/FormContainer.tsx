@@ -16,6 +16,7 @@ import { ArrowRight } from 'lucide-react'
 type FormContainerProps = {
   onHandleInputChange: (field: string, value: any) => void;
   generateInterviewQuestions: () => void;
+//   goToNext: () => void;
 };
 
 
@@ -29,7 +30,6 @@ const FormContainer = ({onHandleInputChange, generateInterviewQuestions}: FormCo
         }
     }, [interviewTypes]);
 
-    console.log("Interview Types 1: ", interviewTypes);
 
     const AddInterviewType = (type: any) => {
         // const data = InterviewTypes.includes(type) ? InterviewTypes.filter((item: string) => item !== type) : [...InterviewTypes, type];
