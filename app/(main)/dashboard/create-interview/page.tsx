@@ -12,11 +12,17 @@ const CreateInterview = () => {
     const [formData, setFormData] = useState({});
 
     const onHandleInputChange = (field:any, value:any) => {
+        console.log("Field: ", field, "Value: ", value);
         setFormData({
             ...formData,
             [field]: value
         });
         console.log("Form Data: ", formData);
+    }
+
+    const generateInterviewQuestions = () => {
+        console.log("Form Data: ", formData);
+        
     }
   return (
     <div className='mt-10 px-4 md:px-24 lg:px-44 xl:px-56'>
@@ -25,7 +31,7 @@ const CreateInterview = () => {
             <h2 className='font-bold text-xl'>Create New Interview</h2>
         </div>
         <Progress value={step * 33.33} className='my-5 text-primary'/>
-        <FormContainer onHandleInputChange={onHandleInputChange}/>
+        <FormContainer onHandleInputChange={onHandleInputChange} generateInterviewQuestions={generateInterviewQuestions}/>
     </div>
   )
 }

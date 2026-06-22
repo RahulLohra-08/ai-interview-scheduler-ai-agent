@@ -15,17 +15,33 @@ import { ArrowRight } from 'lucide-react'
 
 type FormContainerProps = {
   onHandleInputChange: (field: string, value: any) => void;
+  generateInterviewQuestions: () => void;
 };
 
-const FormContainer = ({onHandleInputChange}: FormContainerProps) => {
 
-    const [InterviewTypes, setInterviewTypes] = useState<any>([]);
+const FormContainer = ({onHandleInputChange, generateInterviewQuestions}: FormContainerProps) => {
+
+    const [interviewTypes, setInterviewTypes] = useState<any>([]);
 
     useEffect(() => {
-        if(InterviewTypes && InterviewTypes.length > 0) {
-            onHandleInputChange('type', InterviewTypes);
+        if(interviewTypes && interviewTypes.length > 0) {
+            onHandleInputChange('type', interviewTypes);
         }
-    }, [InterviewTypes]);
+    }, [interviewTypes]);
+
+    console.log("Interview Types 1: ", interviewTypes);
+
+    const AddInterviewType = (type: any) => {
+        // const data = InterviewTypes.includes(type) ? InterviewTypes.filter((item: string) => item !== type) : [...InterviewTypes, type];
+        const data = interviewTypes.includes(type);
+        if(!data) {
+            setInterviewTypes((prev:any) => [...prev, type]);   
+        }else {
+            const result = interviewTypes.filter((item: any) => item !== type);
+            setInterviewTypes(result);
+        }
+    }
+
 
   return (
     <div className='p-5 bg-white rounded-xl'>
@@ -60,10 +76,8 @@ const FormContainer = ({onHandleInputChange}: FormContainerProps) => {
             <h2 className='text-sm'>Interview Type</h2>
             <div className='flex flex-wrap gap-3 mt-2'>
                 {InterviewType && InterviewType.map((type, index) => (
-                  <div key={index} className={`flex p-1 px-2 rounded-2xl bg-white border border-gray-300 cursor-pointer hover:bg-secondary transition-colors duration-200 ${InterviewTypes.includes(type.title) && 'bg-blue-50 text-primary border-primary'}`}
-                    onClick={() => {
-                        setInterviewTypes((prev:any) => [...prev, type.title]);
-                    }}
+                  <div key={index} className={`flex p-1 px-2 rounded-2xl bg-white border border-gray-300 cursor-pointer hover:bg-secondary transition-colors duration-200 ${interviewTypes.includes(type.title) && 'bg-blue-50 text-primary border-primary'}`}
+                    onClick={() =>  AddInterviewType (type.title) }
                   >
                     <type.icon className='h-6 w-6 mr-2'/>
                     <span>{type.title}</span>
@@ -71,7 +85,7 @@ const FormContainer = ({onHandleInputChange}: FormContainerProps) => {
                 ))}
             </div>
         </div>
-        <div className='mt-10 flex items-center justify-end'>
+        <div className='mt-10 flex items-center justify-end' onClick={generateInterviewQuestions}>
             <Button>
                 Generate Questions <ArrowRight />
             </Button>
