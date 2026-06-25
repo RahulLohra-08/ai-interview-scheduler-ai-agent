@@ -9,7 +9,9 @@ const DashboardProvider = ({children}:any) => {
     <SidebarProvider>
       <AppSidebar />
       <div className='bg-gray-100 w-[100%] p-10'>
-        {/* <SidebarTrigger /> */}
+       <div className='flex justify-start md:hidden'>
+         <SidebarTrigger />
+       </div>
         {/* Sidebar trigger to open and close */}
         <WelcomeContainer />
         {children} 

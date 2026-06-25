@@ -1,12 +1,19 @@
+'use client'
 import React, { useEffect, useState } from 'react'
 import axios from 'axios';
 import { toast } from 'sonner';
 import { Loader2Icon } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import QuestionListContainer from './QuestionListContainer';
+import supabase from '@/services/supabaseClient';
+import { useUser } from '@/app/Provider';
+import { v4 as uuidv4 } from 'uuid';
 
-const QuestionsList = ({ formData }: any) => {
-
+const QuestionsList = ({ formData, onCreateLink }: any) => {
+    const {user}:any = useUser();
     const [loader, setLoader] = useState<boolean>(true);
     const [questionsList, setQuestionsList] = useState<any>([]);
+    const [saveLoading, setSaveLoading] = useState<boolean>(false);
 
     useEffect(() => {
         console.log("Form Data in QuestionsList: ", formData);
@@ -36,6 +43,35 @@ const QuestionsList = ({ formData }: any) => {
             toast.error("Failed to generate interview questions. Please try again.");
         } 
     }
+
+    const onFinish = async () => {
+      setSaveLoading(true);
+      const interview_Id = uuidv4(); // Generate a unique ID for the interview
+
+        const { data, error } = await supabase
+        .from('Interviews')
+        .insert([
+          { 
+            ...formData,
+            questionList: questionsList,
+            userEmail: user?.email,
+            interview_Id: interview_Id
+           },
+        ])
+        .select()
+
+        if (error) {
+          console.error("Insert Error:", error);
+          toast.error(error.message);
+          return;
+        }
+
+        setSaveLoading(false);
+        toast.success("Interview saved successfully!");
+
+        onCreateLink(interview_Id);
+    }
+
 
   return (
     <div className="space-y-6">
@@ -71,48 +107,22 @@ const QuestionsList = ({ formData }: any) => {
 
       <div className="grid gap-4">
         {questionsList.map((item: any, index: number) => (
-          <div
-            key={index}
-            className="group rounded-2xl border bg-card p-5 shadow-sm hover:shadow-md transition-all duration-200"
-          >
-            <div className="flex items-start justify-between gap-4">
-
-              <div className="flex gap-4">
-
-                <div className="flex items-center justify-center h-10 w-10 rounded-full border font-semibold text-sm">
-                  {index + 1}
-                </div>
-
-                <div>
-                  <h3 className="font-medium text-lg leading-7">
-                    {item.question}
-                  </h3>
-
-                  <div className="mt-3">
-                    <span
-                      className={`px-3 py-1 rounded-full text-xs font-medium
-                        ${
-                          item.difficulty === "Easy"
-                            ? "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300"
-                            : item.difficulty === "Medium"
-                            ? "bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-300"
-                            : "bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-300"
-                        }`}
-                    >
-                      {item.difficulty}
-                    </span>
-                  </div>
-                </div>
-
-              </div>
-
-            </div>
+          <div key={index}>
+            <QuestionListContainer item={item} index={index} />
           </div>
         ))}
       </div>
     </div>
   )}
 
+  <div className="flex items-center justify-end mt-6">
+     <Button className="bg-primary text-primary-foreground hover:bg-primary/90" onClick={() => onFinish()} disabled={loader || saveLoading}>
+      { loader || saveLoading ? (
+        <Loader2Icon className="animate-spin h-4 w-4 mr-2" />
+      ) : null}
+      Create Interview Link & Finish
+     </Button>
+  </div>
 </div>
   )
 }

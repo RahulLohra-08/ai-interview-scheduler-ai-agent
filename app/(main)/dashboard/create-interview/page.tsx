@@ -8,11 +8,13 @@ import FormContainer from "./_components/FormContainer"
 import QuestionsList from "./QuestionsList"
 import { Toaster } from "@/components/ui/sonner"
 import { toast } from "sonner"
+import InterviewLink from "./InterviewLink"
 
 const CreateInterview = () => {
     const router = useRouter();
     const [step, setStep] = useState(1);
     const [formData, setFormData] = useState<any>({});
+    const [interviewId, setInterviewId] = useState<string>("");
 
     const onHandleInputChange = (field:any, value:any) => {
         // console.log("Field: ", field, "Value: ", value);
@@ -33,6 +35,15 @@ const CreateInterview = () => {
         console.log("Form Data: ", formData);
         setStep(step + 1);
     }
+
+    const onCreateLink = (interview_Id: string) => {
+        setInterviewId(interview_Id);
+        setStep(step + 1);
+        console.log("Interview ID: ", interview_Id);
+        // router.push(`/dashboard/interview-link/${interview_Id}`);
+    }
+
+
   return (
     <div className='mt-10 px-4 md:px-24 lg:px-44 xl:px-56'>
         <div className='flex gap-5 items-center'>
@@ -42,7 +53,9 @@ const CreateInterview = () => {
         <Progress value={step * 33.33} className='my-5 text-primary'/>
         {
             step == 1 ? <FormContainer  onHandleInputChange={onHandleInputChange} generateInterviewQuestions={generateInterviewQuestions}/>
-            : step == 2 ? <QuestionsList formData = {formData}/> : null
+            : step == 2 ? <QuestionsList formData = {formData} onCreateLink={(interview_Id: any) => onCreateLink(interview_Id)}/> 
+            : step == 3 ? <InterviewLink interview_id={interviewId} formData={formData}/> 
+            : null
         }
     </div>
   )
